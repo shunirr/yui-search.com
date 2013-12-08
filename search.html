@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <meta charset="utf-8">
+    <title>ゆいゆい検索!!</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="/css/bootstrap.css" rel="stylesheet">
+    <!--[if lt IE 9]>
+    <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+    <script src="https://oss.maxcdn.com/libs/respond.js/1.3.0/respond.min.js"></script>
+    <![endif]-->
+    <style>
+      .snippet {
+        font-size: smaller;
+        color: gray;
+      }
+      .keyword {
+        font-weight: bold;
+        color: red;
+      }
+      .title {
+        font-weight: bold;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <div class="page-header">
+        <div class="row">
+          <div class="col-md-2">
+            <a href="/"><img src="http://static.s5r.jp/images/2lePiSaU.png" /></a>
+          </div>
+          <div class="col-md-6">
+            <form action="search.html" method="get" class="form-search">
+              <div class="input-group input-group-sm">
+                <input type="text" name="q" class="form-control">
+                <span class="input-group-btn">
+                  <button class="btn btn-default" type="submit"><span class="glyphicon glyphicon-search"></span></button>
+                </span>
+              </div>
+            </form>
+          </div>
+          <div class="col-sm-2">
+            <div id="tweet"></div>
+          </div>
+        </div>
+      </div>
+      <div id="contents"></div>
+    </div>
+
+    <script src="https://code.jquery.com/jquery.js"></script>
+    <script src="/js/bootstrap.js"></script>
+    <script src="/js/purl.js"></script>
+    <script src="/js/jquery.socialbutton.js"></script>
+    <script src="/js/search.js"></script>
+  </body>
+</html>

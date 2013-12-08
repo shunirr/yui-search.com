@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/2.0.2/jquery.min.js"></script>
+    <meta charset=utf-8 />
+    <title>YuiSearch</title>
+    <style>
+      html, body, #main, #viewer {
+        width: 100%;
+        height: 100%;
+        margin: 0;
+        padding: 0;
+        overflow: hidden;
+      }
+      #config {
+        margin: 12px 24px;
+      }
+      #box {
+        position: relative;
+        width: 100%;
+        height: 100%;    
+      }
+      .photo {
+        margin: 0;
+        padding: 0;
+        position: absolute;
+      }
+      .photo.transition {
+        -webkit-transition: all 3s ease-in-out;
+        -moz-transition: all 3s ease-in-out;
+        -o-transition: all 3s ease-in-out;
+        transition: all 3s ease-in-out;
+      }
+      .photo img {
+        max-width: 140px;
+        margin: 0;
+        padding: 3px;
+        background: white;
+        box-shadow: 3px 3px 6px rgba(0, 0, 0, .5);
+        border: 1px solid rgba(0, 0, 0, .2);
+      }
+    </style>
+  </head>
+  <body>
+    <button id="search_button" type=button onclick="search()">私は小倉唯さんの画像を検索します</button>
+    <div id="main">
+      <div id="viewer">
+        <div id="box"></div>
+      </div>
+    </div> 
+    <script>
+      var YuiSearch = function() { this.initialize.apply(this, arguments); };
+      YuiSearch.prototype = {
+        initialize: function(options) {
+          var settings = $.extend({
+            container: "#box",
+            photoSize: 250
+          }, options);
+          this.container = $(settings.container);
+          this.photoSize = settings.photoSize;
+        },
+        randInt: function(min, max) {
+          return Math.floor(min + (Math.random() * (max - min)));
+        },
+        appendItem: function(from, to) {
+          var self = this;
+          $.getJSON("http://api.s5r.jp/images" , function(data) {
+            var $anchor = $("<a>")
+            .attr({
+              href: data[0].permalink
+            });
+            var $image = $("<img>")
+            .attr({
+              src: data[0].image_thumbnail_url
+            });
+            $anchor.append($image)
+            $image.load(function() {
+              var $wrapper = $("<div>")
+                .addClass("photo transition")
+                .css({
+                  top: self.randInt(0, 80) + "%",
+                  left: self.randInt(0, 80) + "%"
+              })
+              .css(from)
+              .append($anchor)
+              .appendTo(self.container);
+              setTimeout(function() {
+                $wrapper.css(to);
+              }, 50);
+              $.each(["webkitTransitionEnd", "oTransitionEnd", "transitionend"], function(i, name) {
+                $wrapper.on(name, function() {
+                  $wrapper.removeClass("transition");
+                });
+              });
+            });
+          });
+        },
+        fall: function() {
+          var rotateFrom = this.randInt(-30, 30);
+          var rotateTo = this.randInt(-30, 30);
+  
+          this.appendItem({
+            "opacity": 0.0,
+            "-webkit-transform": "scale(3.0) rotate("+rotateFrom+"deg)",
+            "-moz-transform": "scale(3.0) rotate("+rotateFrom+"deg)",
+            "-o-transform": "scale(3.0) rotate("+rotateFrom+"deg)",
+            "transform": "scale(3.0) rotate("+rotateFrom+"deg)"
+            }, {
+            "opacity": 1.0,
+            "-webkit-transform": "scale(1.0) rotate("+rotateTo+"deg)",
+            "-moz-transform": "scale(1.0) rotate("+rotateTo+"deg)",
+            "-o-transform": "scale(1.0) rotate("+rotateTo+"deg)",
+            "transform": "scale(1.0) rotate("+rotateTo+"deg)"
+          });
+        }
+      };
+      function search() {
+        $('#search_button').remove();
+        searcher = new YuiSearch({
+          container: "#box"
+        });
+        setInterval(function() {
+          searcher.fall();
+          if ($('.photo').length > 100) {
+            $('.photo').first().remove();
+          }
+        }, 1000);
+      }
+    </script>
+  </body>
+</html>
