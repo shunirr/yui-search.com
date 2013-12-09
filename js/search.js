@@ -16,7 +16,7 @@ YuiSearch.prototype = {
         var $anchor = $("<a>")
           .attr({
             href: data[i].permalink,
-            target: 'blank'
+            target: '_blank'
           })
           .text(data[i].title)
         $title.append($anchor)
