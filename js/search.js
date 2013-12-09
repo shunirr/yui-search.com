@@ -9,7 +9,7 @@ YuiSearch.prototype = {
   },
   search: function(query) {
     var self = this;
-    $.getJSON("http://api.s5r.jp/search?q=" + query , function(data) {
+    $.getJSON("http://api.yui-search.com/search?q=" + query , function(data) {
       for (var i = 0; i < data.length; i++) {
         var $item = $("<div>").attr({ class: "col-md-6" });
         var $title = $("<h2>")
