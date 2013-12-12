@@ -22,17 +22,17 @@ YuiSearch.prototype = {
         $title.append($anchor)
         $item.append($title);
 
+        var $site_info = $('<p>')
+          .attr({ class: 'site_info' })
+          .text(data[i].permalink);
+        $item.append($site_info);
+
         if (data[i].thumbnail) {
           var $image = $('<img>')
             .attr({ class: 'thumbnail' })
             .attr({ src: data[i].thumbnail })
           $item.append($image);
         }
-
-        var $site_info = $('<p>')
-          .attr({ class: 'site_info' })
-          .text(data[i].permalink);
-        $item.append($site_info);
 
         var $snippet = $('<p>')
           .attr({ class: 'snippet' })
