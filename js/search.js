@@ -11,7 +11,7 @@ YuiSearch.prototype = {
     var self = this;
     $.getJSON("http://api.yui-search.com/search?q=" + query , function(data) {
       for (var i = 0; i < data.length; i++) {
-        var $item = $("<div>").attr({ class: "col-md-6" });
+        var $item = $("<div>").attr({ class: "col-md-8" });
         var $title = $("<h2>")
         var $anchor = $("<a>")
           .attr({
@@ -20,10 +20,23 @@ YuiSearch.prototype = {
           })
           .text(data[i].title)
         $title.append($anchor)
+        $item.append($title);
+
+        if (data[i].thumbnail) {
+          var $image = $('<img>')
+            .attr({ class: 'thumbnail' })
+            .attr({ src: data[i].thumbnail })
+          $item.append($image);
+        }
+
+        var $site_info = $('<p>')
+          .attr({ class: 'site_info' })
+          .text(data[i].permalink);
+        $item.append($site_info);
+
         var $snippet = $('<p>')
           .attr({ class: 'snippet' })
           .html(data[i].snippets);
-        $item.append($title);
         $item.append($snippet);
         self.container.append($item);
       }
@@ -44,3 +57,4 @@ YuiSearch.prototype = {
   });
   searcher.search(query);
 }());
+
