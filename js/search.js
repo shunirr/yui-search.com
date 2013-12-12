@@ -28,16 +28,32 @@ YuiSearch.prototype = {
         $item.append($site_info);
 
         if (data[i].thumbnail) {
+          var $row = $('<div>')
+            .attr({ class: 'row' })
+
+          var $col_image = $('<div>')
+            .attr({ class: 'col-md-2' })
           var $image = $('<img>')
             .attr({ class: 'thumbnail' })
             .attr({ src: data[i].thumbnail })
-          $item.append($image);
-        }
+          $col_image.append($image);
+          $item.append($col_image);
 
-        var $snippet = $('<p>')
-          .attr({ class: 'snippet' })
-          .html(data[i].snippets);
-        $item.append($snippet);
+          var $col_snippet = $('<div>')
+            .attr({ class: 'col-md-6' })
+          var $snippet = $('<p>')
+            .attr({ class: 'snippet' })
+            .html(data[i].snippets);
+          $col_snippet.append($snippet);
+
+          $item.append($col_image);
+          $item.append($col_snippet);
+        } else {
+          var $snippet = $('<p>')
+            .attr({ class: 'snippet' })
+            .html(data[i].snippets);
+          $item.append($snippet);
+        }   
         self.container.append($item);
       }
     });
