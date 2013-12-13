@@ -11,9 +11,7 @@ YuiSearch.prototype = {
     var self = this;
     $.getJSON("http://api.yui-search.com/search?q=" + query , function(data) {
       for (var i = 0; i < data.length; i++) {
-        var $item = $("<div>")
-          .attr({ class: "row" });
-
+        var $item = $("<div>");
         var $title = $("<h3>");
         var $anchor = $("<a>")
           .attr({
@@ -61,7 +59,10 @@ YuiSearch.prototype = {
           $item.append($snippet);
         }   
 
-        self.container.append($item);
+        self.container.append(
+          $("<div>")
+            .attr({ class: "row" })
+            .append($item);
       }
     });
   }
