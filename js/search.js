@@ -12,14 +12,8 @@ YuiSearch.prototype = {
     $.getJSON("http://api.yui-search.com/search?q=" + query , function(data) {
       for (var i = 0; i < data.length; i++) {
         var $item = $("<div>");
-        var $title = $("<h3>");
-        var $anchor = $("<a>")
-          .attr({
-            href: data[i].permalink,
-            target: '_blank'
-          })
+        var $title = $("<h3>")
           .text(data[i].title);
-        $title.append($anchor);
         $item.append($title);
 
         var $site_info = $('<p>')
@@ -33,13 +27,11 @@ YuiSearch.prototype = {
 
           var $col_image = $('<div>')
             .attr({ class: 'col-md-2' });
-          var image = $("<a>").attr({
-              href: data[i].permalink,
-              target: '_blank'
-          }).append($('<img>').attr({
-              class: 'thumbnail',
-              src: data[i].thumbnail
-          }));
+          var $image = $('<img>')
+            .attr({
+                class: 'thumbnail',
+                src: data[i].thumbnail
+            });
           $col_image.append($image);
           $row.append($col_image);
 
@@ -59,10 +51,16 @@ YuiSearch.prototype = {
           $item.append($snippet);
         }   
 
+        var $anchor = $("<a>")
+          .attr({
+            href: data[i].permalink,
+            target: '_blank'
+          })
+          .append($item);
         self.container.append(
           $("<div>")
             .attr({ class: "row" })
-            .append($item);
+            .append($anchor));
       }
     });
   }
