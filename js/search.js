@@ -11,15 +11,9 @@ YuiSearch.prototype = {
     var self = this;
     $.getJSON("http://api.yui-search.com/search?q=" + query , function(data) {
       for (var i = 0; i < data.length; i++) {
-        var $item = $("<div>").attr({ class: "col-md-12" });
-        var $title = $("<h2>")
-        var $anchor = $("<a>")
-          .attr({
-            href: data[i].permalink,
-            target: '_blank'
-          })
-          .text(data[i].title)
-        $title.append($anchor)
+        var $item = $("<div>");
+        var $title = $("<h3>")
+          .text(data[i].title);
         $item.append($title);
 
         var $site_info = $('<p>')
@@ -29,18 +23,20 @@ YuiSearch.prototype = {
 
         if (data[i].thumbnail) {
           var $row = $('<div>')
-            .attr({ class: 'row' })
+            .attr({ class: 'row' });
 
           var $col_image = $('<div>')
-            .attr({ class: 'col-md-2' })
+            .attr({ class: 'col-md-2' });
           var $image = $('<img>')
-            .attr({ class: 'thumbnail' })
-            .attr({ src: data[i].thumbnail })
+            .attr({
+                class: 'thumbnail',
+                src: data[i].thumbnail
+            });
           $col_image.append($image);
           $row.append($col_image);
 
           var $col_snippet = $('<div>')
-            .attr({ class: 'col-md-10' })
+            .attr({ class: 'col-md-10' });
           var $snippet = $('<p>')
             .attr({ class: 'snippet' })
             .html(data[i].snippets);
@@ -54,10 +50,17 @@ YuiSearch.prototype = {
             .html(data[i].snippets);
           $item.append($snippet);
         }   
+
+        var $anchor = $("<a>")
+          .attr({
+            href: data[i].permalink,
+            target: '_blank'
+          })
+          .append($item);
         self.container.append(
           $("<div>")
             .attr({ class: "row" })
-            .append($item));
+            .append($anchor));
       }
     });
   }
