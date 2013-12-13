@@ -12,7 +12,7 @@ YuiSearch.prototype = {
     $.getJSON("http://api.yui-search.com/search?q=" + query , function(data) {
       for (var i = 0; i < data.length; i++) {
         var $item = $("<div>").attr({ class: "col-md-12" });
-        var $title = $("<h2>")
+        var $title = $("<h3>")
         var $anchor = $("<a>")
           .attr({
             href: data[i].permalink,
@@ -33,10 +33,16 @@ YuiSearch.prototype = {
 
           var $col_image = $('<div>')
             .attr({ class: 'col-md-2' })
+          var $img_anchor = $("<a>")
+            .attr({
+              href: data[i].permalink,
+              target: '_blank'
+            })
           var $image = $('<img>')
             .attr({ class: 'thumbnail' })
             .attr({ src: data[i].thumbnail })
-          $col_image.append($image);
+          $img_anchor.append($image);
+          $col_image.append($img_anchor);
           $row.append($col_image);
 
           var $col_snippet = $('<div>')
