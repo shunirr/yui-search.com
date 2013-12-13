@@ -37,7 +37,7 @@ YuiSearch.prototype = {
             .attr({ class: 'thumbnail' })
             .attr({ src: data[i].thumbnail })
           $col_image.append($image);
-          $item.append($col_image);
+          $row.append($col_image);
 
           var $col_snippet = $('<div>')
             .attr({ class: 'col-md-6' })
@@ -45,9 +45,9 @@ YuiSearch.prototype = {
             .attr({ class: 'snippet' })
             .html(data[i].snippets);
           $col_snippet.append($snippet);
+          $row.append($col_snippet);
 
-          $item.append($col_image);
-          $item.append($col_snippet);
+          $item.append($row);
         } else {
           var $snippet = $('<p>')
             .attr({ class: 'snippet' })
