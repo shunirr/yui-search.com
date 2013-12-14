@@ -7,9 +7,9 @@ YuiSearch.prototype = {
     this.container = $(settings.container);
     this.photoSize = settings.photoSize;
   },
-  search: function(query) {
+  search: function(query, page) {
     var self = this;
-    $.getJSON("http://api.yui-search.com/search?q=" + query , function(data) {
+    $.getJSON("http://api.yui-search.com/search?q=" + query + "&page=" + page, function(data) {
       for (var i = 0; i < data.length; i++) {
         var $item = $("<div>").attr({ class: "col-md-12" });
         var $title = $("<h3>")
@@ -74,12 +74,13 @@ YuiSearch.prototype = {
     container: "#contents"
   });
   var query = $.url().param('q');
+  var page  = $.url().param('page');
   $('input[name="q"]').val(query);
   $('#tweet').socialbutton('twitter', {
     button: 'horizontal',
     url: location.href,
     text: query + ' - ゆいゆい検索!!'
   });
-  searcher.search(query);
+  searcher.search(query, page);
 }());
 
