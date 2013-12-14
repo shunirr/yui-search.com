@@ -11,6 +11,7 @@ YuiSearch.prototype = {
     var self = this;
     $.getJSON("http://api.yui-search.com/search?q=" + query + "&page=" + page, function(data) {
       var entries = data.entries;
+      var total_page_count = parseInt(data.total_page_count);
       for (var i = 0; i < entries.length; i++) {
         var entry = entries[i];
         var item = $("<div>").attr({ class: "col-md-12" });
@@ -67,6 +68,28 @@ YuiSearch.prototype = {
             .attr({ class: "row" })
             .append(item));
       }
+
+      var paginate = $('<p>');
+      if (page > 1) {
+        var prev = $('<a>')
+          .attr({
+              href: "?q=" + query + "&page=" + (page - 1),
+              rel: 'prev'
+          })
+          .text("Prev");
+        paginate.append(prev);
+      }
+      paginate.append(" ... ");
+      if (page < data.total_page_count) {
+        var next = $('<a>')
+          .attr({
+              href: "?q=" + query + "&page=" + (page + 1),
+              rel: 'next'
+          })
+          .text("Next");
+        paginate.append(next);
+      }
+      self.container.append(paginate);
     });
   }
 };
@@ -77,12 +100,15 @@ YuiSearch.prototype = {
   });
   var query = $.url().param('q');
   var page  = $.url().param('page');
+  if (!page) {
+    page = '1';
+  }
   $('input[name="q"]').val(query);
   $('#tweet').socialbutton('twitter', {
     button: 'horizontal',
     url: location.href,
     text: query + ' - ゆいゆい検索!!'
   });
-  searcher.search(query, page);
+  searcher.search(query, parseInt(page));
 }());
 
