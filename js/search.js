@@ -10,60 +10,62 @@ YuiSearch.prototype = {
   search: function(query, page) {
     var self = this;
     $.getJSON("http://api.yui-search.com/search?q=" + query + "&page=" + page, function(data) {
-      for (var i = 0; i < data.length; i++) {
-        var $item = $("<div>").attr({ class: "col-md-12" });
-        var $title = $("<h3>")
-        var $anchor = $("<a>")
+      var entries = data.entries;
+      for (var i = 0; i < entries.length; i++) {
+        var entry = entries[i];
+        var item = $("<div>").attr({ class: "col-md-12" });
+        var title = $("<h3>")
+        var anchor = $("<a>")
           .attr({
-            href: data[i].permalink,
+            href: entry.permalink,
             target: '_blank'
           })
-          .text(data[i].title)
-        $title.append($anchor)
-        $item.append($title);
+          .text(entry.title)
+        title.append(anchor)
+        item.append(title);
 
-        var $site_info = $('<p>')
+        var site_info = $('<p>')
           .attr({ class: 'site_info' })
-          .text(data[i].permalink);
-        $item.append($site_info);
+          .text(entry.permalink);
+        item.append(site_info);
 
-        if (data[i].thumbnail) {
-          var $row = $('<div>')
+        if (entry.thumbnail) {
+          var row = $('<div>')
             .attr({ class: 'row' })
 
-          var $col_image = $('<div>')
+          var col_image = $('<div>')
             .attr({ class: 'col-md-2' })
-          var $img_anchor = $("<a>")
+          var img_anchor = $("<a>")
             .attr({
-              href: data[i].permalink,
+              href: entry.permalink,
               target: '_blank'
             })
-          var $image = $('<img>')
+          var image = $('<img>')
             .attr({ class: 'thumbnail' })
-            .attr({ src: data[i].thumbnail })
-          $img_anchor.append($image);
-          $col_image.append($img_anchor);
-          $row.append($col_image);
+            .attr({ src: entry.thumbnail })
+          img_anchor.append(image);
+          col_image.append(img_anchor);
+          row.append(col_image);
 
-          var $col_snippet = $('<div>')
+          var col_snippet = $('<div>')
             .attr({ class: 'col-md-10' })
-          var $snippet = $('<p>')
+          var snippet = $('<p>')
             .attr({ class: 'snippet' })
-            .html(data[i].snippets);
-          $col_snippet.append($snippet);
-          $row.append($col_snippet);
+            .html(entry.snippets);
+          col_snippet.append(snippet);
+          row.append(col_snippet);
 
-          $item.append($row);
+          item.append(row);
         } else {
-          var $snippet = $('<p>')
+          var snippet = $('<p>')
             .attr({ class: 'snippet' })
-            .html(data[i].snippets);
-          $item.append($snippet);
+            .html(entry.snippets);
+          item.append(snippet);
         }   
         self.container.append(
           $("<div>")
             .attr({ class: "row" })
-            .append($item));
+            .append(item));
       }
     });
   }
