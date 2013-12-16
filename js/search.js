@@ -5,13 +5,20 @@ YuiSearch.prototype = {
       container: "#contents",
     }, options);
     this.container = $(settings.container);
-    this.photoSize = settings.photoSize;
+    this.page = settings.page;
   },
-  search: function(query, page) {
+  next: function() {
+    if (this.page + 1 <= this.total_page_count) {
+      this.page += 1;
+      return true;
+    }
+    return false;
+  },
+  search: function(query) {
     var self = this;
-    $.getJSON("http://api.yui-search.com/search?q=" + query + "&page=" + page, function(data) {
+    $.getJSON("http://api.yui-search.com/search?q=" + query + "&page=" + self.page, function(data) {
       var entries = data.entries;
-      var total_page_count = parseInt(data.total_page_count);
+      self.total_page_count = parseInt(data.total_page_count);
       for (var i = 0; i < entries.length; i++) {
         var entry = entries[i];
         var item = $("<div>").attr({ class: "col-md-12" });
@@ -68,47 +75,42 @@ YuiSearch.prototype = {
             .attr({ class: "row" })
             .append(item));
       }
-
-      var paginate = $('<p>');
-      if (page > 1) {
-        var prev = $('<a>')
-          .attr({
-              href: "?q=" + query + "&page=" + (page - 1),
-              rel: 'prev'
-          })
-          .text("Prev");
-        paginate.append(prev);
-      }
-      paginate.append(" ... ");
-      if (page < data.total_page_count) {
-        var next = $('<a>')
-          .attr({
-              href: "?q=" + query + "&page=" + (page + 1),
-              rel: 'next'
-          })
-          .text("Next");
-        paginate.append(next);
-      }
-      self.container.append(paginate);
     });
   }
 };
+
 (function() {
   $('#search_button').remove();
-  var searcher = new YuiSearch({
-    container: "#contents"
-  });
-  var query = $.url().param('q');
-  var page  = $.url().param('page');
-  if (!page) {
-    page = '1';
+  var query   = $.url().param('q');
+  var pageStr = $.url().param('page');
+  if (pageStr) {
+    page = parseInt(pageStr);
+  } else {
+    page = 1;
   }
+
   $('input[name="q"]').val(query);
   $('#tweet').socialbutton('twitter', {
     button: 'horizontal',
     url: location.href,
     text: query + ' - ゆいゆい検索!!'
   });
-  searcher.search(query, parseInt(page));
+
+  var searcher = new YuiSearch({
+    container: "#contents",
+    page: page
+  });
+  searcher.search(query);
+
+  // AutoPager
+  $(window).on("scroll", function() {
+      var scrollHeight = $(document).height();
+      var scrollPosition = $(window).height() + $(window).scrollTop();
+      if ((scrollHeight - scrollPosition) / scrollHeight === 0) {
+        if (searcher.next()) {
+          searcher.search(query);
+        }
+      }
+  });
 }());
 
