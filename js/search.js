@@ -14,10 +14,43 @@ YuiSearch.prototype = {
     }
     return false;
   },
+  youtube: function(query) {
+    var self = this;
+    $.getJSON("http://gdata.youtube.com/feeds/api/videos?alt=json&q=" + query, function(data) {
+      var entries = data.feed.entry;
+      if (entries) {
+        var entry = entries[0];
+        var author    = entry.author[0].name.$t;
+        var video     = entry.media$group.media$player[0].url;
+        var thumbnail = entry.media$group.media$thumbnail[0].url;
+        var title     = entry.media$group.media$title.$t;
+        if (author == "kingrecords") {
+          var anchor = $('<a>').attr({
+            href: video,
+            target: '_blank'
+          });
+          var image = $('<img>').attr({
+            src: thumbnail,
+            width: "240",
+            height: "180"
+          });
+          anchor.append(image);
+          self.container.prepend(anchor);
+        }
+      }
+    });
+  },
   search: function(query) {
     var self = this;
     $.getJSON("http://api.yui-search.com/search?q=" + query + "&page=" + self.page, function(data) {
+      if (self.page == 1 && data.info) {
+        self.youtube(data.info);
+      }
       var entries = data.entries;
+      if (!entries) {
+        return;
+      }
+
       self.total_page_count = parseInt(data.total_page_count);
       for (var i = 0; i < entries.length; i++) {
         var entry = entries[i];
