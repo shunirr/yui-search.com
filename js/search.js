@@ -46,11 +46,18 @@ YuiSearch.prototype = {
       if (self.page == 1 && data.info) {
         self.youtube(data.info);
       }
+
+      if (data.total_count && data.total_count > 0) {
+        $('p[id="total_count"]').text(data.total_count + " 件ヒット");
+      } else {
+        $('p[id="total_count"]').text("みつかりませんでした");
+      }
+
       var entries = data.entries;
       if (!entries) {
         return;
       }
-
+      
       self.total_page_count = parseInt(data.total_page_count);
       for (var i = 0; i < entries.length; i++) {
         var entry = entries[i];
