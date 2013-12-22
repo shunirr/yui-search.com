@@ -95,14 +95,16 @@ YuiSearch.prototype = {
         self.youtube(data.info);
       }
 
+      self.count_container.children().remove();
       if (data.total_count && data.total_count > 0) {
-        self.count_container.append($('<p>').text(data.total_count + " 件ヒット"));
+        self.count_container
+          .append($('<p>').text(data.total_count + " 件ヒット"));
       } else {
         self.count_container
           .append($('<p>').text("「ゆいちゃんさすがにその検索ワードはないよ〜」"))
           .append($('<p>').text("「エッ!! キャリさんだって前は" + query + "について調べようとしてたじゃん!」"))
           .append($('<p>').text("「え〜そんなことないよ〜」"))
-          .append($('<p>').text("「ゆいももう大人なんだから" + query +"くらい Google で調べるもん!」"))
+          .append($('<p>').text("「ゆいももう大人なんだから" + query +"くらい Google で調べるもん!」"));
       }
 
       var entries = data.entries;
