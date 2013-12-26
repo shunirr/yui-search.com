@@ -57,7 +57,7 @@ YuiSearch.prototype = {
         .attr({ class: 'col-md-10' })
       var snippet = $('<p>')
         .attr({ class: 'snippet' })
-        .html(item_snippets);
+        .html($('<div>').text(item_snippets).text());
       col_snippet.append(snippet);
       row.append(col_snippet);
 
