@@ -18,7 +18,7 @@ YuiSearch.prototype = {
     }
     return false;
   },
-  create_item: function(item_title, item_url, item_snippets, image_url) {
+  create_item: function(item_title, item_url, item_created_at, item_snippets, image_url) {
     var item = $("<div>").attr({ class: "col-md-12" });
     var title = $("<h3>")
     var anchor = $("<a>")
@@ -30,9 +30,14 @@ YuiSearch.prototype = {
     title.append(anchor)
     item.append(title);
 
+    var site_info_str = item_url;
+    if (item_created_at) {
+      site_info_str = item_created_at.substr(0, 10) + ' ' + site_info_str;
+    }
+
     var site_info = $('<p>')
       .attr({ class: 'site_info' })
-      .text(item_url);
+      .text(site_info_str);
     item.append(site_info);
 
     if (image_url) {
@@ -82,7 +87,7 @@ YuiSearch.prototype = {
         var title     = entry.media$group.media$title.$t;
         if (author == "kingrecords") {
           self.container.prepend(
-              self.create_item(title, video, null, thumbnail)
+              self.create_item(title, video, null, null, thumbnail)
           );
         }
       }
@@ -116,7 +121,7 @@ YuiSearch.prototype = {
       for (var i = 0; i < entries.length; i++) {
         var entry = entries[i];
         self.container.append(
-            self.create_item(entry.title, entry.permalink, entry.snippets, entry.thumbnail)
+            self.create_item(entry.title, entry.permalink, entry.created_at, entry.snippets, entry.thumbnail)
         );
       }
     });
